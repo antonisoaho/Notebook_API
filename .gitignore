@@ -1,4 +1,4 @@
 node_modules/
-collections
+database/collections
 .env
 package-lock.json
