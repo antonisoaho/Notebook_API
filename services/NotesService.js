@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Note = require('../models/NoteModel');
+const validateNoteLength = require('../middlewares/NoteMiddleware');
 
 const getNotes = async (userId) => {
   try {
@@ -17,6 +18,12 @@ const getNotes = async (userId) => {
 
 const createNote = async (newNote) => {
   try {
+    if (!validateNoteLength(newNote))
+      return {
+        status: 400,
+        result: { error: 'Note does not meet expectation.' },
+      };
+
     const note = new Note(newNote);
     const result = await note.save();
 
@@ -35,6 +42,12 @@ const changeNote = async (newNote, filter) => {
       !mongoose.Types.ObjectId.isValid(filter.createdBy)
     )
       return { status: 400, result: 'Invalid ID format' };
+
+    if (!validateNoteLength(newNote))
+      return {
+        status: 400,
+        result: { error: 'Note does not meet expectation.' },
+      };
 
     const result = await Note.findOneAndUpdate(filter, newNote, {
       new: true,
