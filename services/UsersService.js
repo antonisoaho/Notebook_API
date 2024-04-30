@@ -37,7 +37,7 @@ const loginUser = async (username, password) => {
       password,
       existingUser.password
     );
-    if (!passwordMatch) return { status: 404, result: 'Incorrect password' };
+    if (!passwordMatch) return { status: 401, result: 'Incorrect password' };
 
     const result = jwt.sign(
       { username: existingUser.username, userId: existingUser._id },
